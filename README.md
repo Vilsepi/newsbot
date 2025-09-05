@@ -1,1 +1,2 @@
-# newsbot
+
+## OpenAI Telegram news bot

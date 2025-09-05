@@ -1,0 +1,36 @@
+service: newsbot
+frameworkVersion: ">=4.18.2 <5.0.0"
+
+custom:
+  credentialsProfile: heap
+  region: eu-west-1
+  secret: ${file(secrets.yml)}
+
+provider:
+  name: aws
+  runtime: nodejs22.x
+  region: ${self:custom.region}
+  profile: ${self:custom.credentialsProfile}
+  environment:
+    OPENAI_API_KEY: ${self:custom.secret.openai_api_key}
+    TELEGRAM_BOT_AUTH_TOKEN: ${self:custom.secret.telegram_bot_auth_token}
+    TELEGRAM_CHAT_ID: ${self:custom.secret.telegram_chat_id}
+
+functions:
+  postNews:
+    handler: dist/index.handler
+    memorySize: 128
+    timeout: 120
+    events:
+      - schedule: cron(00 08 ? * * *)
+
+plugins:
+  - serverless-plugin-common-excludes
+  - serverless-plugin-include-dependencies
+
+# package:
+#   patterns:
+#     - "!*"
+#     - "!*/**"
+#     - "dist/**"
+#     - "node_modules/**"
