@@ -7,7 +7,7 @@ export const mainApp = async (dryrun: boolean): Promise<void> => {
   const telegramClient: TelegramClient = new TelegramClient();
 
   const prompt = "Anna yhteenveto päivän merkittävimmistä uutisista suomeksi.";
-  const message = await openAiClient.getResponse(prompt);
+  const message = (await openAiClient.getResponse(prompt)).output_text;
   console.log(message);
 
   if (!dryrun) {
